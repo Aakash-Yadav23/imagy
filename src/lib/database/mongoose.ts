@@ -22,19 +22,31 @@ if (!cached) {
 
 
 export const connectToDatabase = async () => {
-    if (cached.conn) return cached.conn;
-
-    if (!MONGODB_URL) throw new Error("MONGODB_URL Not Defined");
-
-
-    cached.promise =
-        cached.promise ||
-        mongoose.connect(MONGODB_URL, {
-            dbName: "imagy", bufferCommands: false
-        })
+    console.log("Connecting To Database",);
+    try {
 
 
-    cached.conn = await cached.promise;
+        if (cached.conn) return cached.conn;
 
 
+
+        if (!MONGODB_URL) throw new Error("MONGODB_URL Not Defined");
+
+
+
+
+        cached.promise =
+            cached.promise ||
+            mongoose.connect(MONGODB_URL, {
+                dbName: "imagy", bufferCommands: false
+            })
+
+
+        cached.conn = await cached.promise;
+
+        console.log("Connected To Database",);
+    } catch (error: any) {
+        console.error("Error connecting to database", error);
+        throw new Error("Error connecting to database", error);
+    }
 }

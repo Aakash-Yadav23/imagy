@@ -8,6 +8,13 @@ import User from "../database/models/user.model";
 import { connectToDatabase } from "../database/mongoose";
 import { handleError } from "../utils";
 
+
+import axios from 'axios';
+import { CreateUserParams, LoginParams, UpdateUserParams } from "@/types";
+
+
+
+
 // CREATE
 export async function createUser(user: CreateUserParams) {
     try {
@@ -26,9 +33,9 @@ export async function getUserById(userId: string) {
     try {
         await connectToDatabase();
 
-        const user = await User.findOne({ clerkId: userId });
+        const user = await User.findById({ id: userId });
 
-        if (!user) throw new Error("User not found");
+        if (!user) return;
 
         return JSON.parse(JSON.stringify(user));
     } catch (error) {
@@ -36,12 +43,28 @@ export async function getUserById(userId: string) {
     }
 }
 
-// UPDATE
-export async function updateUser(clerkId: string, user: UpdateUserParams) {
+
+export async function getUserByEmail(email: string) {
     try {
         await connectToDatabase();
 
-        const updatedUser = await User.findOneAndUpdate({ clerkId }, user, {
+        const user = await User.findOne({ email });
+
+        if (!user) return;
+
+        return JSON.parse(JSON.stringify(user));
+    } catch (error) {
+        handleError(error);
+    }
+}
+
+
+// UPDATE
+export async function updateUser(userId: string, user: UpdateUserParams) {
+    try {
+        await connectToDatabase();
+
+        const updatedUser = await User.findOneAndUpdate({ userId }, user, {
             new: true,
         });
 
@@ -54,12 +77,12 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
 }
 
 // DELETE
-export async function deleteUser(clerkId: string) {
+export async function deleteUser(userId: string) {
     try {
         await connectToDatabase();
 
         // Find user to delete
-        const userToDelete = await User.findOne({ clerkId });
+        const userToDelete = await User.findOne({ userId });
 
         if (!userToDelete) {
             throw new Error("User not found");
