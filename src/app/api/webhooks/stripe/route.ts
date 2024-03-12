@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
-import { createTransaction } from "@/lib/actions/transaction.action";
+
+import { createTransaction } from "@/lib/actions/transaction.actions";
 import { NextResponse } from "next/server";
 import stripe from "stripe";
 
