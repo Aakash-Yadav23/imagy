@@ -20,13 +20,10 @@ const useAuthStore = () => {
     const router = useRouter();
     const pathname = usePathname();
     const login = async (userData: LoginParams) => {
-        console.log("login", userData)
         setIsLoading(true);
         try {
-            console.log("login", 2)
 
             const loggedInUser = await loginUser(userData);
-            console.log("login", 3)
 
             router.push("/")
             toast.success('Login successful');
@@ -44,7 +41,6 @@ const useAuthStore = () => {
         try {
             const fetchedUser = await fetchAuthDetails();
             setUser(fetchedUser);
-            console.log('fetcheduser', fetchedUser)
             if (pathname.includes('/sign-in')) {
                 router.push("/")
             }

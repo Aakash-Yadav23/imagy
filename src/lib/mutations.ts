@@ -1,5 +1,5 @@
-import { CreateUserParams, LoginParams, User } from "@/types";
 import axios from "axios";
+import { CreateUserParams, LoginParams, User } from "@/types";
 
 
 
@@ -29,7 +29,6 @@ export const loginUser = async (userData: LoginParams) => {
 export const registerUser = async (userData: CreateUserParams) => {
 
     try {
-        console.log("UUUUUUUUUU", userData);
         const response = await axios.post('/api/register', userData);
 
         return response;
