@@ -12,14 +12,14 @@ declare type CreateUserParams = {
 
 export interface User {
   id?: string;
-  _id?: string;
-  planId?: number
+  _id: string;
+  planId: number
   email: string;
   firstName: string;
   lastName: string;
   username: string;
   photo: string;
-  creditBalance?: number;
+  creditBalance: number;
   __v: number;
   password?: string
   // Add other user properties as needed
@@ -55,6 +55,9 @@ declare type AddImageParams = {
   userId: string;
   path: string;
 };
+
+
+//
 
 declare type UpdateImageParams = {
   image: {

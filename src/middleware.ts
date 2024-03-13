@@ -10,13 +10,11 @@ export function middleware(request: NextRequest) {
     const url = request.nextUrl;
 
     const cookiesFromRequest = cookies();
-
+    const publicRouts = ['/profile']
     // Get a specific cookie by name
     const token = cookiesFromRequest.get('token')?.value;
 
-    console.log("url", request.nextUrl.href)
 
-    console.log("tokeneeeeeeeeeeee", token)
 
 
     if (url.pathname === '/') {
@@ -41,13 +39,13 @@ export function middleware(request: NextRequest) {
     }
 
     // For other pages, check if the user is authenticated
-    if (!token) {
+    if (!token && url.pathname === '/') {
         // If the user is not authenticated, redirect them to the sign-in page
-        return NextResponse.redirect(new URL('/sign-in', request.url));
+        return NextResponse.redirect(new URL('/', request.url));
     }
 
     try {
-        jwt.verify(token, secretKey);
+
         // If the token is valid, allow the user to access the page
         return NextResponse.next();
     } catch (error) {
@@ -59,5 +57,5 @@ export function middleware(request: NextRequest) {
 
 // Apply the middleware to all routes
 export const config = {
-    matcher: ['/', '/signin', '/dashboard', '/profile'],
+    matcher: ['/', '/signin', '/dashboard'],
 };

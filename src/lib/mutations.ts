@@ -21,7 +21,7 @@ export const loginUser = async (userData: LoginParams) => {
 
 
 
-    return response.data.message;
+    return response;
 };
 
 

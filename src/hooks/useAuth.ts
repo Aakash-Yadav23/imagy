@@ -1,21 +1,14 @@
 'use client'
-import { CreateUserParams, LoginParams } from '@/types';
+import { CreateUserParams, LoginParams, User } from '@/types';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { fetchAuthDetails, loginUser, logoutUser, registerUser } from '@/lib/mutations';
 
-interface User {
-    id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    username: string;
-    // Add other user properties as needed
-}
+
 
 const useAuthStore = () => {
-    const [user, setUser] = useState<any | null>();
+    const [user, setUser] = useState<User | null>();
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
@@ -24,7 +17,7 @@ const useAuthStore = () => {
         try {
 
             const loggedInUser = await loginUser(userData);
-
+            console.log(loggedInUser)
             router.push("/")
             toast.success('Login successful');
         } catch (error: any) {
@@ -42,8 +35,9 @@ const useAuthStore = () => {
             const fetchedUser = await fetchAuthDetails();
             setUser(fetchedUser);
             if (pathname.includes('/sign-in')) {
-                router.push("/")
+                // router.push("/")
             }
+            setIsLoading(false);
 
             return fetchedUser;
             // toast.success('User details fetched');
@@ -93,10 +87,10 @@ const useAuthStore = () => {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                const fetchedUser = await fetchAuthDetails();
+                const fetchedUser = await fetchAuthDetails() as User;
                 setUser(fetchedUser);
                 if (pathname.includes('/sign-in' || 'sign-up')) {
-                    router.push("/")
+                    // router.push("/")
                 }
 
 

@@ -50,7 +50,12 @@ async function POST(request: NextRequest, res: NextApiResponse) {
         );
 
         if (!isValid) {
-            throw new Error('Invalid email or password');
+            return NextResponse.json({
+                message: "Invalid credentials"
+            }, {
+                status: 401,
+                statusText: 'Unauthorized'
+            });
         }    // Authenticate user
 
         console.log("IsValid", isValid);
@@ -74,10 +79,11 @@ async function POST(request: NextRequest, res: NextApiResponse) {
         });
 
 
-    } catch (error) {
+    } catch (error: any) {
         console.log("Login Error", error);
-        return NextResponse.json({ message: "Something went wrong", error });
 
+        NextResponse.json({ message: "Something went wrong", error });
+        throw new Error(error)
     }
 
 }
