@@ -1,17 +1,44 @@
-
+'use client'
 import { Collection } from "@/components/shared/Collection"
 import { navLinks } from "@/constants"
+import useAuthStore from "@/hooks/useAuth"
 import { getAllImages } from "@/lib/actions/image.actions"
+import { IImage } from "@/lib/database/models/image.models"
 import { SearchParamProps } from "@/types"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
-const Home = async ({ searchParams }: SearchParamProps) => {
+const Home = ({ searchParams }: SearchParamProps) => {
     const page = Number(searchParams?.page) || 1;
     const searchQuery = (searchParams?.query as string) || '';
+    const router = useRouter();
+    const [image, setImage] = useState<any | null>(null);
+    const { user, isLoading } = useAuthStore();
 
-    const images = await getAllImages({ page, searchQuery })
 
+
+    const [loading, setIsLoading] = useState(true);
+
+
+    useEffect(() => {
+        const fetchImage = async () => {
+            try {
+                const images = await getAllImages({ page, searchQuery }) as unknown as any;
+                setImage(images);
+                setIsLoading(false);
+            } catch (error) {
+                console.error('Error fetching image:', error);
+                setIsLoading(false);
+                // Handle error, maybe redirect to an error page
+                router.push('/error');
+            }
+        };
+
+        fetchImage();
+
+    }, []);
     return (
         <>
             <section className="home">
@@ -35,12 +62,15 @@ const Home = async ({ searchParams }: SearchParamProps) => {
             </section>
 
             <section className="sm:mt-12">
-                <Collection
-                    hasSearch={true}
-                    images={images?.data}
-                    totalPages={images?.totalPage}
-                    page={page}
-                />
+                {
+                    image &&
+                    <Collection
+                        hasSearch={true}
+                        images={image?.data}
+                        totalPages={image?.totalPage}
+                        page={page}
+                    />
+                }
             </section>
         </>
     )
