@@ -32,7 +32,7 @@ const Home = ({ searchParams }: SearchParamProps) => {
                 console.error('Error fetching image:', error);
                 setIsLoading(false);
                 // Handle error, maybe redirect to an error page
-                router.push('/error');
+                // router.push('/error');
             }
         };
 
