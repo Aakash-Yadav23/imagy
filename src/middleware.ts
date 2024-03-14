@@ -57,5 +57,5 @@ export function middleware(request: NextRequest) {
 
 // Apply the middleware to all routes
 export const config = {
-    matcher: ['/', '/signin', '/dashboard'],
+    matcher: ['/sign-up','/signin', '/profile',],
 };
